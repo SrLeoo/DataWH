@@ -4,7 +4,7 @@ async function iniciar() {
     try {
         const conexao = await conectarBanco();
         console.log('Conexão feita com sucesso! 🎉');
-        conexao.end(); // encerra a conexão depois
+        conexao.end();
     } catch (erro) {
         console.error(erro);
     }
