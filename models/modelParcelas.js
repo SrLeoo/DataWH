@@ -23,7 +23,6 @@ async function executar(itemId) {
     console.log(`\nSPA ${item.id} (Título: ${item.title})`);
     console.log(`Criado em: ${item.createdTime}`);
     console.log(`Responsável: ${item.assignedById}`);
-
     console.log(`parcela_title: ${item.ufCrm9_1734704375}`);
     console.log(`spa_vencimento_da_parcela: ${item.ufCrm9_1734704375}`);
     console.log(`spa_valor: ${item.ufCrm9_1734704390}`);
@@ -33,6 +32,7 @@ async function executar(itemId) {
     console.log(`spa_conta: ${item.ufCrm9_1736577814}`);
     console.log(`spa_tipo_de_conta: ${item.ufCrm9_1736577834}`);
     console.log(`spa_banco: ${item.ufCrm9_1743618466962}`);
+    console.log(`spa_negocio: ${item.parentId2}`);
 
     // Inserção no banco
     await inserirSPAParcelas(item);
