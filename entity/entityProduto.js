@@ -1,4 +1,3 @@
-// entity/entityProduto.js
 const { conectarBanco } = require('../db/conecBD');
 
 async function inserirSPAProduto(item) {
@@ -14,8 +13,11 @@ async function inserirSPAProduto(item) {
         spa_valor_unitario,
         spa_valor_total,
         spa_id_projeto,
-        spa_id_centro_de_custo
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        spa_id_centro_de_custo,
+        spa_subcategoria,
+        spa_conta_contabil,
+        spa_quantidade_fechamento
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON DUPLICATE KEY UPDATE
         produtos_title = VALUES(produtos_title),
         spa_ncm_sh = VALUES(spa_ncm_sh),
@@ -23,18 +25,24 @@ async function inserirSPAProduto(item) {
         spa_valor_unitario = VALUES(spa_valor_unitario),
         spa_valor_total = VALUES(spa_valor_total),
         spa_id_projeto = VALUES(spa_id_projeto),
-        spa_id_centro_de_custo = VALUES(spa_id_centro_de_custo)
+        spa_id_centro_de_custo = VALUES(spa_id_centro_de_custo),
+        spa_subcategoria = VALUES(spa_subcategoria),
+        spa_conta_contabil = VALUES(spa_conta_contabil),
+        spa_quantidade_fechamento = VALUES(spa_quantidade_fechamento)
     `;
 
     const valores = [
       item.id,
       item.title || null,
-      item.ufCrm13_1736526141 || null,
-      item.ufCrm13_1736526487 || null,
-      parseFloat((item.ufCrm13_1736526502 || '0').split('|')[0]),
-      parseFloat((item.ufCrm13_1736526603 || '0').split('|')[0]),
-      item.parentId1040 || null,
-      item.parentId1048 || null
+      item.ufCrm13_1736526141 || null, // NCM/SH
+      item.ufCrm13_1736526487 || null, // Quantidade
+      parseFloat(item.ufCrm13_1736526502?.split('|')[0]) || 0, // Valor Unitário
+      parseFloat(item.ufCrm13_1736526603?.split('|')[0]) || 0, // Valor Total
+      item.parentId1040 || null,       // Projeto
+      item.parentId1048 || null,       // Centro de Custo
+      item.ufCrm13_1741811686 || null, // Subcategoria
+      item.ufCrm13Contacontabil || null, // Conta Contábil
+      item.ufCrm13_1742708209 || null  // Quantidade [Fechamento]
     ];
 
     console.log('🔄 Inserindo SPA de Produto no banco...', valores);
