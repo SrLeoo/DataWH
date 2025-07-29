@@ -1,29 +1,54 @@
-const axios = require('axios');
-require('dotenv').config();
+const { conectarBanco } = require('../db/conecBD');
 
-const listarNegociosAPI = async () => {
-    try {
+async function inserirNFIntegracao(deal) {
+  try {
+    const conexao = await conectarBanco();
 
-        const url = `${process.env.BITRIX_WEBHOOK}/crm.deal.list`;
+    const sql = `
+      INSERT INTO bi_alt.deal_NFIntegracao (
+        id_deal,
+        deal_title,
+        deal_valor,
+        deal_dataEmissao,
+        deal_resumo,
+        deal_comprador,
+        deal_NFCNPJ,
+        deal_NFFornecedor,
+        deal_qtdParcelas
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ON DUPLICATE KEY UPDATE
+        deal_title = VALUES(deal_title),
+        deal_valor = VALUES(deal_valor),
+        deal_dataEmissao = VALUES(deal_dataEmissao),
+        deal_resumo = VALUES(deal_resumo),
+        deal_comprador = VALUES(deal_comprador),
+        deal_NFCNPJ = VALUES(deal_NFCNPJ),
+        deal_NFFornecedor = VALUES(deal_NFFornecedor),
+        deal_qtdParcelas = VALUES(deal_qtdParcelas)
+    `;
 
-        const response = await axios.get(url, {
-            params: {
-                filter: {
-                    "CATEGORY_ID": "49", //NÃO MEXER
-                },
-                select: ["ID", "TITLE" ],
-                order: {"ID": "ASC"}
-            }
-        });
+    const valores = [
+      deal.ID,
+      deal.TITLE,
+      parseFloat(deal.OPPORTUNITY) || 0,
+      deal.UF_CRM_1740818224573 || null,
+      deal.UF_CRM_1671806783 || null,
+      Array.isArray(deal.UF_CRM_1741097481) && deal.UF_CRM_1741097481.length > 0
+        ? deal.UF_CRM_1741097481[0]
+        : null,
+      deal.UF_CRM_1668797471381 || null,
+      deal.UF_CRM_1668797465377 || null,
+      1 // Valor fixo de parcelas
+    ];
 
-        if (response.data.result) {
-            console.log(response.data.result);
-        } else {
-            console.log("Nenhum negócio encontrado no funil 49.");
-        }
-    } catch (error) {
-        console.error('Erro ao buscar os negócios na API do Bitrix:', error);
-    }
-};
+    console.log('🔄 Inserindo no banco...', valores);
 
-listarNegociosAPI();
+    await conexao.query(sql, valores);
+    console.log('✅ Deal inserida com sucesso no banco!');
+    conexao.end();
+  } catch (err) {
+    console.error('❌ Erro ao inserir deal:', err.message);
+  }
+}
+
+module.exports = { inserirNFIntegracao };

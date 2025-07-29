@@ -15,7 +15,7 @@ const conectarBanco = () => {
                 reject('Erro ao conectar no banco:' + err);
             } else {
                 console.log('Conexão com o banco estabelecida');
-                resolve(conexao);
+                resolve(conexao.promise()); // <- aqui!
             }
         });
     });
