@@ -1,6 +1,7 @@
-// models/modelProduto.js
 const axios = require('axios');
 require('dotenv').config();
+
+const { inserirSPAProduto } = require('../entity/entityProduto');
 
 async function executar(itemId) {
   const entityTypeId = 1044;
@@ -19,8 +20,16 @@ async function executar(itemId) {
 
     console.log(`SPA ${item.id} (Produto)`);
     console.log(`Título: ${item.title}`);
-    console.log(`NCM/SH: ${item.UF_CRM_13_1736526141}`);
-    // Exiba outros campos relevantes aqui...
+    console.log(`NCM/SH: ${item.ufCrm13_1736526141}`);
+    console.log(`QuantidadeR: ${item.ufCrm13_1736526487}`);
+    console.log(`ValorUnitário: ${item.ufCrm13_1736526502}`);
+    console.log(`ValorTotalRealizado: ${item.ufCrm13_1736526603}`);
+    console.log(`Projeto Vinculado (parentId1040): ${item.parentId1040}`);
+    console.log(`Centro de Custo (parentId1048): ${item.parentId1048}`);
+    console.log(`Categoria (parentId1056): ${item.parentId1056}`);
+
+    // Inserção no banco
+    await inserirSPAProduto(item);
 
   } catch (error) {
     console.error('Erro ao processar SPA Produto:', error.response?.data || error.message);
