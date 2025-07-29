@@ -2,9 +2,8 @@
     spa_Parcelas
     spa_Projetos
     spa_Produtos
-
+    spa_CentroDeCusto
 
 Spa restante:
-    Centro de custo
     Categorias
     Orçamento
