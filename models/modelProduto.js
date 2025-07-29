@@ -1,16 +1,30 @@
-async function processar(item) {
-  const id = item.id;
-  const title = item.title;
-  const stageId = item.stageId;
-  const dataCriacao = item.createdTime;
+// models/modelProduto.js
+const axios = require('axios');
+require('dotenv').config();
 
-  console.log('🛠️ Processando Produto:');
-  console.log('🔹 ID:', id);
-  console.log('🔹 TITLE:', title);
-  console.log('🔹 STAGE_ID:', stageId);
-  console.log('🔹 DATE_CREATE:', dataCriacao);
+async function executar(itemId) {
+  const entityTypeId = 1044;
 
-  // aqui você pode salvar no banco, ou passar para uma entidade
+  try {
+    const url = `${process.env.BITRIX_WEBHOOK}/crm.item.get`;
+    const response = await axios.get(url, {
+      params: { entityTypeId, id: itemId }
+    });
+
+    const item = response.data.result.item;
+    if (!item) {
+      console.warn(`SPA Produto ID ${itemId} não encontrado`);
+      return;
+    }
+
+    console.log(`SPA ${item.id} (Produto)`);
+    console.log(`Título: ${item.title}`);
+    console.log(`NCM/SH: ${item.UF_CRM_13_1736526141}`);
+    // Exiba outros campos relevantes aqui...
+
+  } catch (error) {
+    console.error('Erro ao processar SPA Produto:', error.response?.data || error.message);
+  }
 }
 
-module.exports = { processar };
+module.exports = { executar };
