@@ -26,7 +26,7 @@ async function identificarEProcessar(evento, data) {
       console.log(`Deal ${deal.ID} é do funil 49. Processando Projetos...`);
       await modelDeal.processar(deal);
       await inserirNFIntegracao(deal);
-      await modelProjetos.processar(deal);
+      await modelProjetos.executar(deal);
     } else {
       console.log(`Deal ${deal.ID} pertence ao funil ${categoryId}. Ignorada.`);
     }
