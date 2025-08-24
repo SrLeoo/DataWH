@@ -2,6 +2,11 @@ const axios = require("axios");
 require("dotenv").config();
 const { inserirSPAOrcamento } = require("../entity/entityOrcamento");
 
+function limparValor(valor) {
+  if (!valor) return 0;
+  return parseFloat(valor.toString().replace("|BRL", "").replace(",", ".")) || 0;
+}
+
 async function executar(itemId) {
   const entityTypeId = 1060; // ID da SPA Orçamento
 
@@ -17,15 +22,24 @@ async function executar(itemId) {
       return;
     }
 
+    const valorOrcamento = limparValor(item.ufCrm21_1740551446497);
+    const valorUtilizado = limparValor(item.ufCrm21_1742871692);
+    const valorRestante = limparValor(item.ufCrm21_1742871717);
+
     console.log(`SPA ${item.id} (Orçamento)`);
     console.log(`Título: ${item.title}`);
-    console.log(`Valor do Orçamento: ${item.ufCrm21_1740551446497}`);
+    console.log(`Valor do Orçamento: ${valorOrcamento}`);
     console.log(`Vigente?: ${item.ufCrm21_1740820579}`);
-    console.log(`Valor Utilizado: ${item.ufCrm21_1742871692}`);
-    console.log(`Valor Restante: ${item.ufCrm21_1742871717}`);
+    console.log(`Valor Utilizado: ${valorUtilizado}`);
+    console.log(`Valor Restante: ${valorRestante}`);
     console.log(`Centro de Custo (parentId): ${item.parentId1048}`);
 
-    await inserirSPAOrcamento(item);
+    await inserirSPAOrcamento({
+      ...item,
+      ufCrm21_1740551446497: valorOrcamento,
+      ufCrm21_1742871692: valorUtilizado,
+      ufCrm21_1742871717: valorRestante
+    });
 
   } catch (error) {
     console.error("Erro ao processar SPA Orçamento:", error.response?.data || error.message);
@@ -33,6 +47,3 @@ async function executar(itemId) {
 }
 
 module.exports = { executar };
-
-
-

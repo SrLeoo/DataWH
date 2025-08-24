@@ -4,6 +4,11 @@ require('dotenv').config();
 
 const { inserirSPAProjeto } = require('../entity/entityProjeto');
 
+function limparValor(valor) {
+  if (!valor) return 0;
+  return parseFloat(valor.toString().replace("|BRL", "").replace(",", ".")) || 0;
+}
+
 async function executar(itemId) {
   const entityTypeId = 1040; // ID da SPA de Projetos
 
@@ -19,23 +24,21 @@ async function executar(itemId) {
       return;
     }
 
+    // Conversões
+    const custoRealizado = limparValor(item.ufCrm11_1736527566);
+    const valorPendente = limparValor(item.ufCrm11_1736527535);
+
     console.log(`SPA ${item.id} (Projeto)`);
     console.log(`Título: ${item.title}`);
-    console.log(`Custo Real [Fechamento]: ${item.ufCrm11_1736527482}`);
-    console.log(`Economia do projeto [Previsto-Real]: ${item.ufCrm11_1736527517}`);
-    console.log(`Valor pendente [Previsto-Realizado]: ${item.ufCrm11_1736527535}`);
-    console.log(`Custo previsto [Manual]: ${item.ufCrm11_1736527556}`);
-    console.log(`Custo realizado [Automático]: ${item.ufCrm11_1736527566}`);
-    console.log(`Código: ${item.ufCrm11_1740118723}`);
-    console.log(`Identificação: ${item.ufCrm11_1740118797}`);
-    console.log(`Endereço: ${item.ufCrm11_1740118816}`);
-    console.log(`Cidade: ${item.ufCrm11_1740118837}`);
-    console.log(`UF: ${item.ufCrm11_1740118857}`);
-    console.log(`CEP: ${item.ufCrm11_1740118870}`);
-    console.log(`Projetoscol: ${item.ufCrm11_1740118879}`);
+    console.log(`Custo realizado [Automático]: ${custoRealizado}`);
+    console.log(`Valor pendente [Previsto-Realizado]: ${valorPendente}`);
 
-    // Inserção no banco
-    await inserirSPAProjeto(item);
+    // Inserção no banco com valores tratados
+    await inserirSPAProjeto({
+      ...item,
+      ufCrm11_1736527566: custoRealizado,     // spa_custo_realizado
+      ufCrm11_1736527535: valorPendente       // spa_valor_pendente
+    });
 
   } catch (error) {
     console.error('Erro ao processar SPA Projeto:', error.response?.data || error.message);

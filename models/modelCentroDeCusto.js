@@ -1,10 +1,9 @@
 const axios = require('axios');
 require('dotenv').config();
-
 const { inserirCentroDeCusto } = require('../entity/entityCentroDeCusto');
 
 async function executar(itemId) {
-  const entityTypeId = 1048; // ID do Centro de Custo
+  const entityTypeId = 1048;
 
   try {
     const url = `${process.env.BITRIX_WEBHOOK}/crm.item.get`;
@@ -26,7 +25,17 @@ async function executar(itemId) {
     console.log(`Valor Restante: ${item.ufCrm15_1742744559}`);
     console.log(`Report Enviado: ${item.ufCrm15_1743529391}`);
 
-    await inserirCentroDeCusto(item);
+    // Conversão dos campos |BRL para float
+    const valorUtilizado = parseFloat((item.ufCrm15_1740556366 || '0').split('|')[0]);
+    const valorRestante = parseFloat((item.ufCrm15_1742744559 || '0').split('|')[0]);
+
+    const centroDeCustoTratado = {
+      ...item,
+      ufCrm15_1740556366: valorUtilizado,
+      ufCrm15_1742744559: valorRestante
+    };
+
+    await inserirCentroDeCusto(centroDeCustoTratado);
 
   } catch (error) {
     console.error('Erro ao processar Centro de Custo:', error.response?.data || error.message);
