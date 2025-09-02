@@ -35,6 +35,7 @@ async function processar(deal) {
     'NFs Vinculadas': deal.UF_CRM_1739932981,
     'CNPJ': deal.UF_CRM_1668797471381,
     'Fornecedor': deal.UF_CRM_1668797465377,
+    'Data de Vencimento': deal.UF_CRM_1669380856931
   };
 
   console.log('Campos da Deal:');
