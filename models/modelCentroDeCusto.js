@@ -26,11 +26,14 @@ async function executar(itemId) {
     console.log(`Report Enviado: ${item.ufCrm15_1743529391}`);
 
     // Conversão dos campos |BRL para float
+    
+    const valorOrcamento = parseFloat((item.ufCrm15_1740128202 || '0').split('|')[0]);
     const valorUtilizado = parseFloat((item.ufCrm15_1740556366 || '0').split('|')[0]);
     const valorRestante = parseFloat((item.ufCrm15_1742744559 || '0').split('|')[0]);
 
     const centroDeCustoTratado = {
       ...item,
+      ufCrm15_1740128202: valorOrcamento,
       ufCrm15_1740556366: valorUtilizado,
       ufCrm15_1742744559: valorRestante
     };

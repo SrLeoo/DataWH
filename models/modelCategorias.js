@@ -25,7 +25,20 @@ async function executar(itemId) {
     console.log(`Status: ${item.ufCrm19_1740820304}`);
     console.log(`Valor Restante: ${item.ufCrm19_1742744609}`);
 
-    await inserirSPACategoria(item);
+    // Conversão dos campos |BRL para float
+    const valorOrcamento = parseFloat((item.ufCrm19_1740129258 || '0').split('|')[0]);
+    const valorUtilizado = parseFloat((item.ufCrm19_1740555537 || '0').split('|')[0]);
+    const valorRestante = parseFloat((item.ufCrm19_1742744609 || '0').split('|')[0]);
+
+    const categoriaTratada = {
+      ...item,
+      ufCrm19_1740129258: valorOrcamento,
+      ufCrm19_1740555537: valorUtilizado,
+      ufCrm19_1742744609: valorRestante
+    };
+
+    await inserirSPACategoria(categoriaTratada);
+
   } catch (error) {
     console.error("Erro ao processar SPA Categoria:", error.response?.data || error.message);
   }
