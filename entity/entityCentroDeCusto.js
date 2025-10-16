@@ -33,12 +33,12 @@ async function inserirCentroDeCusto(item) {
       item.ufCrm15_1743529391 || null,
     ];
 
-    console.log("🔄 Inserindo Centro de Custo no banco...", valores);
+    console.log("Inserindo Centro de Custo no banco...", valores);
     await conexao.query(sql, valores);
-    console.log("✅ Centro de Custo inserido com sucesso!");
+    console.log("Centro de Custo inserido com sucesso!");
     conexao.end();
   } catch (err) {
-    console.error("❌ Erro ao inserir Centro de Custo:", err.message);
+    console.error("Erro ao inserir Centro de Custo:", err.message);
   }
 }
 

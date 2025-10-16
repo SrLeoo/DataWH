@@ -30,12 +30,12 @@ ON DUPLICATE KEY UPDATE
       item.ufCrm19_1742744609 || null, // Valor Restante
     ];
 
-    console.log("🔄 Inserindo SPA de Categoria no banco...", valores);
+    console.log("Inserindo SPA de Categoria no banco...", valores);
     await conexao.query(sql, valores);
-    console.log("✅ Categoria inserida com sucesso!");
+    console.log("Categoria inserida com sucesso!");
     conexao.end();
   } catch (err) {
-    console.error("❌ Erro ao inserir SPA Categoria:", err.message);
+    console.error("Erro ao inserir SPA Categoria:", err.message);
   }
 }
 

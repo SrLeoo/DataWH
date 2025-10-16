@@ -40,7 +40,7 @@ async function processar(deal) {
 
   console.log('Campos da Deal:');
   for (const [chave, valor] of Object.entries(campos)) {
-    console.log(`🔹 ${chave}: ${valor}`);
+    console.log(`${chave}: ${valor}`);
   }
 }
 

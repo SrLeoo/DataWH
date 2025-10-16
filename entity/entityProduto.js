@@ -45,12 +45,12 @@ async function inserirSPAProduto(item) {
       item.ufCrm13_1742708209 || null  // Quantidade [Fechamento]
     ];
 
-    console.log('🔄 Inserindo SPA de Produto no banco...', valores);
+    console.log('Inserindo SPA de Produto no banco...', valores);
     await conexao.query(sql, valores);
-    console.log('✅ Produto inserido com sucesso!');
+    console.log('Produto inserido com sucesso!');
     conexao.end();
   } catch (err) {
-    console.error('❌ Erro ao inserir SPA Produto:', err.message);
+    console.error('Erro ao inserir SPA Produto:', err.message);
   }
 }
 

@@ -21,14 +21,19 @@ async function identificarEProcessar(evento, data) {
     if (!deal) return console.warn(`Deal ${dealId} não encontrada`);
 
     const categoryId = parseInt(deal.CATEGORY_ID);
+    const dealTitle = (deal.TITLE)
 
-    if (categoryId === 49) {
-      console.log(`Deal ${deal.ID} é do funil 49. Processando Projetos...`);
+    if (categoryId === 49 ) {
+      if (dealTitle.includes('[Cópia]')) {
+        console.log(`Deal ${deal.ID} é do funil 49, mas é uma Cópia. Ignorada.`) //Log [Cópia]
+        return
+          }
+      
+      console.log(`Deal ${deal.ID} é do funil 49.`); //Log Funil = 49
       await modelDeal.processar(deal);
       await inserirNFIntegracao(deal);
-      await modelProjetos.executar(deal);
     } else {
-      console.log(`Deal ${deal.ID} pertence ao funil ${categoryId}. Ignorada.`);
+      console.log(`Deal ${deal.ID} pertence ao funil ${categoryId}. Ignorada.`); //Log Funil != 49
     }
 
   // Processar SPA via model responsável

@@ -51,12 +51,12 @@ async function inserirSPAParcelas(item) {
       idDeal
     ];
 
-    console.log('🔄 Inserindo SPA de Parcelas no banco...', valores);
+    console.log('Inserindo SPA de Parcelas no banco...', valores);
     await conexao.query(sql, valores);
-    console.log('✅ Parcela inserida com sucesso!');
+    console.log('Parcela inserida com sucesso!');
     conexao.end();
   } catch (err) {
-    console.error('❌ Erro ao inserir SPA de Parcelas:', err.message);
+    console.error('Erro ao inserir SPA de Parcelas:', err.message);
   }
 }
 

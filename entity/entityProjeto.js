@@ -55,12 +55,12 @@ ON DUPLICATE KEY UPDATE
       item.ufCrm11_1740118879 || null, // spa_Projetoscol
     ];
 
-    console.log("🔄 Inserindo SPA de Projeto no banco...", valores);
+    console.log("Inserindo SPA de Projeto no banco...", valores);
     await conexao.query(sql, valores);
-    console.log("✅ Projeto inserido com sucesso!");
+    console.log("Projeto inserido com sucesso!");
     conexao.end();
   } catch (err) {
-    console.error("❌ Erro ao inserir SPA Projeto:", err.message);
+    console.error("Erro ao inserir SPA Projeto:", err.message);
   }
 }
 

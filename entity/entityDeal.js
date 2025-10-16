@@ -48,12 +48,12 @@ async function inserirNFIntegracao(deal) {
 
     ];
 
-    console.log('🔄 Inserindo no banco...', valores);
+    console.log('Inserindo no banco...', valores);
     await conexao.query(sql, valores);
-    console.log('✅ Deal inserida com sucesso no banco!');
+    console.log('Deal inserida com sucesso no banco!');
     conexao.end();
   } catch (err) {
-    console.error('❌ Erro ao inserir deal:', err.message);
+    console.error('Erro ao inserir deal:', err.message);
   }
 }
 

@@ -33,12 +33,12 @@ async function inserirSPAOrcamento(item) {
       item.parentId1048 || null
     ];
 
-    console.log("🔄 Inserindo SPA Orçamento no banco...", valores);
+    console.log("Inserindo SPA Orçamento no banco...", valores);
     await conexao.query(sql, valores);
-    console.log("✅ SPA Orçamento inserido com sucesso!");
+    console.log("SPA Orçamento inserido com sucesso!");
     conexao.end();
   } catch (err) {
-    console.error("❌ Erro ao inserir SPA Orçamento:", err.message);
+    console.error("Erro ao inserir SPA Orçamento:", err.message);
   }
 }
 

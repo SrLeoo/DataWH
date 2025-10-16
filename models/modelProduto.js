@@ -14,7 +14,7 @@ async function executar(itemId) {
 
     const item = response.data.result.item;
     if (!item) {
-      console.warn(`❗ SPA Produto ID ${itemId} não encontrado`);
+      console.warn(`SPA Produto ID ${itemId} não encontrado`);
       return;
     }
 
@@ -35,7 +35,7 @@ async function executar(itemId) {
     await inserirSPAProduto(item);
 
   } catch (error) {
-    console.error('❌ Erro ao processar SPA Produto:', error.response?.data || error.message);
+    console.error('Erro ao processar SPA Produto:', error.response?.data || error.message);
   }
 }
 
