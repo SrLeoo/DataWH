@@ -18,7 +18,6 @@ async function identificarEProcessar(evento, data) {
   if (isDeal) {
     const dealId = data['data[FIELDS][ID]'];
     const deal = await buscarDealNoBitrix(dealId);
-    if (!deal) return console.warn(`Deal ${dealId} não encontrada`);
 
     const categoryId = parseInt(deal.CATEGORY_ID);
     const dealTitle = (deal.TITLE)

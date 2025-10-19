@@ -41,13 +41,13 @@ async function inserirSPAProduto(item) {
       item.parentId1040 || null,       // Projeto
       item.parentId1048 || null,       // Centro de Custo
       item.ufCrm13_1741811686 || null, // Subcategoria
-      item.ufCrm13Contacontabil || null, // Conta Contábil
+      item.ufCrm13_1760825261 || null, // Conta Contábil
       item.ufCrm13_1742708209 || null  // Quantidade [Fechamento]
     ];
 
-    console.log('Inserindo SPA de Produto no banco...', valores);
+    // console.log('Inserindo SPA de Produto no banco...', valores); Log de dados inseridos no Banco de dados
     await conexao.query(sql, valores);
-    console.log('Produto inserido com sucesso!');
+    console.log('Produto inserido/atualizado com sucesso!');
     conexao.end();
   } catch (err) {
     console.error('Erro ao inserir SPA Produto:', err.message);
