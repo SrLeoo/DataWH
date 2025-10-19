@@ -1,24 +1,22 @@
-const { conectarBanco } = require("../db/conecBD");
+const { pool } = require("../db/conecBD");
 
 async function inserirSPACategoria(item) {
   try {
-    const conexao = await conectarBanco();
-
     const sql = `
-INSERT INTO bi_alt.spa_Categorias (
-  id_Categorias,
-  categorias_title,
-  spa_valor_orcamento,
-  spa_valor_utilizado,
-  spa_status,
-  spa_valor_restante
-) VALUES (?, ?, ?, ?, ?, ?)
-ON DUPLICATE KEY UPDATE
-  categorias_title = VALUES(categorias_title),
-  spa_valor_orcamento = VALUES(spa_valor_orcamento),
-  spa_valor_utilizado = VALUES(spa_valor_utilizado),
-  spa_status = VALUES(spa_status),
-  spa_valor_restante = VALUES(spa_valor_restante)
+      INSERT INTO bi_alt.spa_Categorias (
+        id_Categorias,
+        categorias_title,
+        spa_valor_orcamento,
+        spa_valor_utilizado,
+        spa_status,
+        spa_valor_restante
+      ) VALUES (?, ?, ?, ?, ?, ?)
+      ON DUPLICATE KEY UPDATE
+        categorias_title = VALUES(categorias_title),
+        spa_valor_orcamento = VALUES(spa_valor_orcamento),
+        spa_valor_utilizado = VALUES(spa_valor_utilizado),
+        spa_status = VALUES(spa_status),
+        spa_valor_restante = VALUES(spa_valor_restante)
     `;
 
     const valores = [
@@ -30,10 +28,9 @@ ON DUPLICATE KEY UPDATE
       item.ufCrm19_1742744609 || null, // Valor Restante
     ];
 
-    console.log("Inserindo SPA de Categoria no banco...", valores);
-    await conexao.query(sql, valores);
+    //console.log("Inserindo SPA de Categoria no banco...", valores);
+    await pool.query(sql, valores);
     console.log("Categoria inserida com sucesso!");
-    conexao.end();
   } catch (err) {
     console.error("Erro ao inserir SPA Categoria:", err.message);
   }

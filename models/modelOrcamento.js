@@ -4,7 +4,9 @@ const { inserirSPAOrcamento } = require("../entity/entityOrcamento");
 
 function limparValor(valor) {
   if (!valor) return 0;
-  return parseFloat(valor.toString().replace("|BRL", "").replace(",", ".")) || 0;
+  return (
+    parseFloat(valor.toString().replace("|BRL", "").replace(",", ".")) || 0
+  );
 }
 
 async function executar(itemId) {
@@ -13,7 +15,7 @@ async function executar(itemId) {
   try {
     const url = `${process.env.BITRIX_WEBHOOK}/crm.item.get`;
     const response = await axios.get(url, {
-      params: { entityTypeId, id: itemId }
+      params: { entityTypeId, id: itemId },
     });
 
     const item = response.data.result.item;
@@ -38,11 +40,13 @@ async function executar(itemId) {
       ...item,
       ufCrm21_1740551446497: valorOrcamento,
       ufCrm21_1742871692: valorUtilizado,
-      ufCrm21_1742871717: valorRestante
+      ufCrm21_1742871717: valorRestante,
     });
-
   } catch (error) {
-    console.error("Erro ao processar SPA Orçamento:", error.response?.data || error.message);
+    console.error(
+      "Erro ao processar SPA Orçamento:",
+      error.response?.data || error.message
+    );
   }
 }
 

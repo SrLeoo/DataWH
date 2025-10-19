@@ -1,8 +1,8 @@
 // models/modelParcelas.js
-const axios = require('axios');
-require('dotenv').config();
+const axios = require("axios");
+require("dotenv").config();
 
-const { inserirSPAParcelas } = require('../entity/entityParcelas');
+const { inserirSPAParcelas } = require("../entity/entityParcelas");
 
 async function executar(itemId) {
   const entityTypeId = 1036;
@@ -10,7 +10,7 @@ async function executar(itemId) {
   try {
     const url = `${process.env.BITRIX_WEBHOOK}/crm.item.get`;
     const response = await axios.get(url, {
-      params: { entityTypeId, id: itemId }
+      params: { entityTypeId, id: itemId },
     });
 
     const item = response.data.result.item;
@@ -36,9 +36,11 @@ async function executar(itemId) {
 
     // Inserção no banco
     await inserirSPAParcelas(item);
-
   } catch (error) {
-    console.error('Erro ao processar SPA Parcelas:', error.response?.data || error.message);
+    console.error(
+      "Erro ao processar SPA Parcelas:",
+      error.response?.data || error.message
+    );
   }
 }
 

@@ -1,44 +1,45 @@
-const modelDeal = require('./modelDeal');
-const { buscarDealNoBitrix } = require('./modelDeal');
+const modelDeal = require("./modelDeal");
+const { buscarDealNoBitrix } = require("./modelDeal");
 
-const modelCategorias = require('./modelCategorias');        // ID 1056
-const modelCentroDeCusto = require('./modelCentroDeCusto');  // ID 1048
-const modelOrcamento = require('./modelOrcamento');          // ID 1060
-const modelParcelas = require('./modelParcelas');            // ID 1036
-const modelProduto = require('./modelProduto');              // ID 1044
-const modelProjetos = require('./modelProjetos');            // ID 1040
+const modelCategorias = require("./modelCategorias"); // ID 1056
+const modelCentroDeCusto = require("./modelCentroDeCusto"); // ID 1048
+const modelOrcamento = require("./modelOrcamento"); // ID 1060
+const modelParcelas = require("./modelParcelas"); // ID 1036
+const modelProduto = require("./modelProduto"); // ID 1044
+const modelProjetos = require("./modelProjetos"); // ID 1040
 
-const { inserirNFIntegracao } = require('../entity/entityDeal');
+const { inserirNFIntegracao } = require("../entity/entityDeal");
 
 async function identificarEProcessar(evento, data) {
-  const isDeal = evento === 'ONCRMDEALUPDATE';
-  const isSPA = evento.startsWith('ONCRMDYNAMICITEM');
+  const isDeal = evento === 'ONCRMDEALUPDATE' || evento === 'ONCRMDEALADD';
+  const isSPA = evento === 'ONCRMDYNAMICITEMUPDATE' || evento === 'ONCRMDYNAMICITEMADD';  
 
-  // Processar negócio tradicional
   if (isDeal) {
-    const dealId = data['data[FIELDS][ID]'];
+    const dealId = data["data[FIELDS][ID]"];
     const deal = await buscarDealNoBitrix(dealId);
 
     const categoryId = parseInt(deal.CATEGORY_ID);
-    const dealTitle = (deal.TITLE)
+    const dealTitle = deal.TITLE;
 
-    if (categoryId === 49 ) {
-      if (dealTitle.includes('[Cópia]')) {
-        console.log(`Deal ${deal.ID} é do funil 49, mas é uma Cópia. Ignorada.`) //Log [Cópia]
-        return
-          }
-      
+    if (categoryId === 49) {
+      if (dealTitle.includes("[Cópia]")) {
+        console.log(
+          `Deal ${deal.ID} é do funil 49, mas é uma Cópia. Ignorada.`
+        );
+        return;
+      }
+
       console.log(`Deal ${deal.ID} é do funil 49.`); //Log Funil = 49
       await modelDeal.processar(deal);
       await inserirNFIntegracao(deal);
     } else {
-      console.log(`Deal ${deal.ID} pertence ao funil ${categoryId}. Ignorada.`); //Log Funil != 49
+      // console.log(`Deal ${deal.ID} pertence ao funil ${categoryId}. Ignorada.`); //Log Funil != 49
     }
 
-  // Processar SPA via model responsável
+    // Processar SPA
   } else if (isSPA) {
-    const itemId = data['data[FIELDS][ID]'];
-    const entityTypeId = parseInt(data['data[FIELDS][ENTITY_TYPE_ID]']);
+    const itemId = data["data[FIELDS][ID]"];
+    const entityTypeId = parseInt(data["data[FIELDS][ENTITY_TYPE_ID]"]);
 
     switch (entityTypeId) {
       case 1056:
@@ -62,7 +63,6 @@ async function identificarEProcessar(evento, data) {
       default:
         console.log(`ENTITY_TYPE_ID ${entityTypeId} não mapeado`);
     }
-
   } else {
     console.log(`Evento ${evento} não tratado`);
   }

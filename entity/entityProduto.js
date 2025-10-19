@@ -1,9 +1,7 @@
-const { conectarBanco } = require('../db/conecBD');
+const { pool } = require("../db/conecBD");
 
 async function inserirSPAProduto(item) {
   try {
-    const conexao = await conectarBanco();
-
     const sql = `
       INSERT INTO bi_alt.spa_Produtos (
         id_produtos,
@@ -36,21 +34,20 @@ async function inserirSPAProduto(item) {
       item.title || null,
       item.ufCrm13_1736526141 || null, // NCM/SH
       item.ufCrm13_1736526487 || null, // Quantidade
-      parseFloat(item.ufCrm13_1736526502?.split('|')[0]) || 0, // Valor Unitário
-      parseFloat(item.ufCrm13_1736526603?.split('|')[0]) || 0, // Valor Total
-      item.parentId1040 || null,       // Projeto
-      item.parentId1048 || null,       // Centro de Custo
+      parseFloat(item.ufCrm13_1736526502?.split("|")[0]) || 0, // Valor Unitário
+      parseFloat(item.ufCrm13_1736526603?.split("|")[0]) || 0, // Valor Total
+      item.parentId1040 || null, // Projeto
+      item.parentId1048 || null, // Centro de Custo
       item.ufCrm13_1741811686 || null, // Subcategoria
       item.ufCrm13_1760825261 || null, // Conta Contábil
-      item.ufCrm13_1742708209 || null  // Quantidade [Fechamento]
+      item.ufCrm13_1742708209 || null, // Quantidade [Fechamento]
     ];
 
-    // console.log('Inserindo SPA de Produto no banco...', valores); Log de dados inseridos no Banco de dados
-    await conexao.query(sql, valores);
-    console.log('Produto inserido/atualizado com sucesso!');
-    conexao.end();
+    // console.log('Inserindo SPA de Produto no banco...', valores); // log detalhado
+    await pool.query(sql, valores);
+    console.log("Produto inserido/atualizado com sucesso!");
   } catch (err) {
-    console.error('Erro ao inserir SPA Produto:', err.message);
+    console.error("Erro ao inserir SPA Produto:", err.message);
   }
 }
 

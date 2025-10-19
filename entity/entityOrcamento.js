@@ -1,9 +1,8 @@
-const { conectarBanco } = require("../db/conecBD");
+const { pool } = require("../db/conecBD");
 
 async function inserirSPAOrcamento(item) {
   try {
     const conexao = await conectarBanco();
-
     const sql = `
       INSERT INTO bi_alt.spa_Orcamento (
         id_Orcamento,
@@ -30,11 +29,11 @@ async function inserirSPAOrcamento(item) {
       item.ufCrm21_1740820579 || null,
       item.ufCrm21_1742871692 || null,
       item.ufCrm21_1742871717 || null,
-      item.parentId1048 || null
+      item.parentId1048 || null,
     ];
 
-    console.log("Inserindo SPA Orçamento no banco...", valores);
-    await conexao.query(sql, valores);
+    //console.log("Inserindo SPA Orçamento no banco...", valores);
+    await pool.query(sql, valores);
     console.log("SPA Orçamento inserido com sucesso!");
     conexao.end();
   } catch (err) {

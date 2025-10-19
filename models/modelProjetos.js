@@ -1,12 +1,14 @@
 // models/modelProjetos.js
-const axios = require('axios');
-require('dotenv').config();
+const axios = require("axios");
+require("dotenv").config();
 
-const { inserirSPAProjeto } = require('../entity/entityProjeto');
+const { inserirSPAProjeto } = require("../entity/entityProjeto");
 
 function limparValor(valor) {
   if (!valor) return 0;
-  return parseFloat(valor.toString().replace("|BRL", "").replace(",", ".")) || 0;
+  return (
+    parseFloat(valor.toString().replace("|BRL", "").replace(",", ".")) || 0
+  );
 }
 
 async function executar(itemId) {
@@ -15,7 +17,7 @@ async function executar(itemId) {
   try {
     const url = `${process.env.BITRIX_WEBHOOK}/crm.item.get`;
     const response = await axios.get(url, {
-      params: { entityTypeId, id: itemId }
+      params: { entityTypeId, id: itemId },
     });
 
     const item = response.data.result.item;
@@ -36,12 +38,14 @@ async function executar(itemId) {
     // Inserção no banco com valores tratados
     await inserirSPAProjeto({
       ...item,
-      ufCrm11_1736527566: custoRealizado,     // spa_custo_realizado
-      ufCrm11_1736527535: valorPendente       // spa_valor_pendente
+      ufCrm11_1736527566: custoRealizado, // spa_custo_realizado
+      ufCrm11_1736527535: valorPendente, // spa_valor_pendente
     });
-
   } catch (error) {
-    console.error('Erro ao processar SPA Projeto:', error.response?.data || error.message);
+    console.error(
+      "Erro ao processar SPA Projeto:",
+      error.response?.data || error.message
+    );
   }
 }
 

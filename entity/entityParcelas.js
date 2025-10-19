@@ -1,13 +1,10 @@
-const { conectarBanco } = require('../db/conecBD');
+const { pool } = require("../db/conecBD");
 
 async function inserirSPAParcelas(item) {
   try {
-    const conexao = await conectarBanco();
-
-    // Captura dos campos corretamente mapeados
     const vencimento = item.ufCrm9_1734704375 || null;
-    const valorBruto = item.ufCrm9_1734704390 || '';
-    const valor = parseFloat(valorBruto.split('|')[0]) || 0;
+    const valorBruto = item.ufCrm9_1734704390 || "";
+    const valor = parseFloat(valorBruto.split("|")[0]) || 0;
     const idDeal = item.parentId2 || null;
 
     const sql = `
@@ -48,15 +45,14 @@ async function inserirSPAParcelas(item) {
       item.ufCrm9_1736577814 || null,
       item.ufCrm9_1736577834 || null,
       item.ufCrm9_1743618466962 || null,
-      idDeal
+      idDeal,
     ];
 
-    console.log('Inserindo SPA de Parcelas no banco...', valores);
-    await conexao.query(sql, valores);
-    console.log('Parcela inserida com sucesso!');
-    conexao.end();
+    // console.log('Inserindo SPA de Parcelas no banco...', valores);
+    await pool.query(sql, valores);
+    console.log("Parcela inserida com sucesso!");
   } catch (err) {
-    console.error('Erro ao inserir SPA de Parcelas:', err.message);
+    console.error("Erro ao inserir SPA de Parcelas:", err.message);
   }
 }
 

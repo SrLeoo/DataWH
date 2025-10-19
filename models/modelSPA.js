@@ -1,5 +1,5 @@
-const axios = require('axios');
-require('dotenv').config();
+const axios = require("axios");
+require("dotenv").config();
 
 async function buscarSPAItemNoBitrix(entityTypeId, itemId) {
   try {
@@ -7,13 +7,16 @@ async function buscarSPAItemNoBitrix(entityTypeId, itemId) {
     const response = await axios.get(url, {
       params: {
         entityTypeId,
-        id: itemId
-      }
+        id: itemId,
+      },
     });
 
     return response.data.result.item;
   } catch (error) {
-    console.error('Erro ao buscar SPA item:', error.response?.data || error.message);
+    console.error(
+      "Erro ao buscar SPA item:",
+      error.response?.data || error.message
+    );
     return null;
   }
 }

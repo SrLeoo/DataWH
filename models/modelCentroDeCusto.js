@@ -1,6 +1,6 @@
-const axios = require('axios');
-require('dotenv').config();
-const { inserirCentroDeCusto } = require('../entity/entityCentroDeCusto');
+const axios = require("axios");
+require("dotenv").config();
+const { inserirCentroDeCusto } = require("../entity/entityCentroDeCusto");
 
 async function executar(itemId) {
   const entityTypeId = 1048;
@@ -8,7 +8,7 @@ async function executar(itemId) {
   try {
     const url = `${process.env.BITRIX_WEBHOOK}/crm.item.get`;
     const response = await axios.get(url, {
-      params: { entityTypeId, id: itemId }
+      params: { entityTypeId, id: itemId },
     });
 
     const item = response.data.result.item;
@@ -26,22 +26,30 @@ async function executar(itemId) {
     console.log(`Report Enviado: ${item.ufCrm15_1743529391}`);
 
     // Conversão dos campos |BRL para float
-    
-    const valorOrcamento = parseFloat((item.ufCrm15_1740128202 || '0').split('|')[0]);
-    const valorUtilizado = parseFloat((item.ufCrm15_1740556366 || '0').split('|')[0]);
-    const valorRestante = parseFloat((item.ufCrm15_1742744559 || '0').split('|')[0]);
+
+    const valorOrcamento = parseFloat(
+      (item.ufCrm15_1740128202 || "0").split("|")[0]
+    );
+    const valorUtilizado = parseFloat(
+      (item.ufCrm15_1740556366 || "0").split("|")[0]
+    );
+    const valorRestante = parseFloat(
+      (item.ufCrm15_1742744559 || "0").split("|")[0]
+    );
 
     const centroDeCustoTratado = {
       ...item,
       ufCrm15_1740128202: valorOrcamento,
       ufCrm15_1740556366: valorUtilizado,
-      ufCrm15_1742744559: valorRestante
+      ufCrm15_1742744559: valorRestante,
     };
 
     await inserirCentroDeCusto(centroDeCustoTratado);
-
   } catch (error) {
-    console.error('Erro ao processar Centro de Custo:', error.response?.data || error.message);
+    console.error(
+      "Erro ao processar Centro de Custo:",
+      error.response?.data || error.message
+    );
   }
 }
 

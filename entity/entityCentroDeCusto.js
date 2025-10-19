@@ -1,9 +1,7 @@
-const { conectarBanco } = require("../db/conecBD");
+const { pool } = require("../db/conecBD");
 
 async function inserirCentroDeCusto(item) {
   try {
-    const conexao = await conectarBanco();
-
     const sql = `
       INSERT INTO bi_alt.spa_CentroDeCusto (
         id_CentroDeCusto,
@@ -33,10 +31,9 @@ async function inserirCentroDeCusto(item) {
       item.ufCrm15_1743529391 || null,
     ];
 
-    console.log("Inserindo Centro de Custo no banco...", valores);
-    await conexao.query(sql, valores);
+    // console.log("Inserindo Centro de Custo no banco...", valores);
+    await pool.query(sql, valores);
     console.log("Centro de Custo inserido com sucesso!");
-    conexao.end();
   } catch (err) {
     console.error("Erro ao inserir Centro de Custo:", err.message);
   }

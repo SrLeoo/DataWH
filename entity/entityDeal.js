@@ -1,9 +1,7 @@
-const { conectarBanco } = require('../db/conecBD');
+const { pool } = require("../db/conecBD");
 
 async function inserirNFIntegracao(deal) {
   try {
-    const conexao = await conectarBanco();
-
     const sql = `
       INSERT INTO bi_alt.deal_NFIntegracao (
         id_deal,
@@ -30,30 +28,28 @@ async function inserirNFIntegracao(deal) {
         deal_responsavel = VALUES(deal_responsavel),
         deal_dataVencimento = VALUES(deal_dataVencimento)
     `;
-    
+
     const valores = [
       deal.ID,
       deal.TITLE,
       parseFloat(deal.OPPORTUNITY) || 0,
       deal.UF_CRM_1740818224573 || null, // Data da Emissão
-      deal.UF_CRM_1671806783 || null,    // Resumo
+      deal.UF_CRM_1671806783 || null, // Resumo
       Array.isArray(deal.UF_CRM_1741097481) && deal.UF_CRM_1741097481.length > 0
         ? deal.UF_CRM_1741097481[0]
-        : null,                          // Comprador
+        : null, // Comprador
       deal.UF_CRM_1668797471381 || null, // CNPJ
       deal.UF_CRM_1668797465377 || null, // Fornecedor
       1, // Quantidade de parcelas (fixo)
-      deal.ASSIGNED_BY_ID || null,       // Responsável
-      deal.UF_CRM_1669380856931 || null // Data de Vencimento
-
+      deal.ASSIGNED_BY_ID || null, // Responsável
+      deal.UF_CRM_1669380856931 || null, // Data de Vencimento
     ];
 
-    console.log('Inserindo no banco...', valores);
-    await conexao.query(sql, valores);
-    console.log('Deal inserida com sucesso no banco!');
-    conexao.end();
+    //console.log('Inserindo no banco...', valores);
+    await pool.query(sql, valores);
+    console.log("Deal inserida com sucesso no banco!");
   } catch (err) {
-    console.error('Erro ao inserir deal:', err.message);
+    console.error("Erro ao inserir deal:", err.message);
   }
 }
 
