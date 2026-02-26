@@ -1,17 +1,20 @@
 {
-  "name": "datawh",
+  "name": "datawh-refatorado",
   "type": "commonjs",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "1.1.0",
+  "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "dev": "node app.js"
   },
-  "author": "",
+  "author": "Leonardo Magalhães",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "axios": "^1.9.0",
     "dotenv": "^16.5.0",
-    "mysql2": "^3.14.1"
+    "express": "^4.19.2",
+    "mysql2": "^3.14.1",
+    "pino": "^9.3.1",
+    "pino-pretty": "^11.2.2"
   }
 }
